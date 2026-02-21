@@ -1,7 +1,22 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+import type { Customer } from '../types';
+
+export interface CustomerData {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+}
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
+
+const API_BASE_URL = (import.meta.env.REACT_APP_API_URL as string) || 'http://localhost:5000/api';
 
 // Fetch all customers
-export const fetchCustomers = async () => {
+export const fetchCustomers = async (): Promise<ApiResponse<any[]>> => {
   try {
     const response = await fetch(`${API_BASE_URL}/customers`);
     if (!response.ok) throw new Error('Failed to fetch customers');
@@ -13,7 +28,7 @@ export const fetchCustomers = async () => {
 };
 
 // Fetch single customer
-export const fetchCustomerById = async (id) => {
+export const fetchCustomerById = async (id: string): Promise<ApiResponse<any>> => {
   try {
     const response = await fetch(`${API_BASE_URL}/customers/${id}`);
     if (!response.ok) throw new Error('Failed to fetch customer');
@@ -25,7 +40,7 @@ export const fetchCustomerById = async (id) => {
 };
 
 // Create customer
-export const createCustomer = async (customerData) => {
+export const createCustomer = async (customerData: CustomerData): Promise<ApiResponse<any>> => {
   try {
     const response = await fetch(`${API_BASE_URL}/customers`, {
       method: 'POST',
@@ -44,7 +59,7 @@ export const createCustomer = async (customerData) => {
 };
 
 // Update customer
-export const updateCustomer = async (id, customerData) => {
+export const updateCustomer = async (id: string, customerData: Partial<CustomerData>): Promise<ApiResponse<any>> => {
   try {
     const response = await fetch(`${API_BASE_URL}/customers/${id}`, {
       method: 'PUT',
@@ -63,7 +78,7 @@ export const updateCustomer = async (id, customerData) => {
 };
 
 // Delete customer
-export const deleteCustomer = async (id) => {
+export const deleteCustomer = async (id: string): Promise<ApiResponse<any>> => {
   try {
     const response = await fetch(`${API_BASE_URL}/customers/${id}`, {
       method: 'DELETE',
@@ -77,7 +92,7 @@ export const deleteCustomer = async (id) => {
 };
 
 // Search customers
-export const searchCustomers = async (query) => {
+export const searchCustomers = async (query: string): Promise<ApiResponse<any[]>> => {
   try {
     const response = await fetch(
       `${API_BASE_URL}/customers/search?query=${encodeURIComponent(query)}`

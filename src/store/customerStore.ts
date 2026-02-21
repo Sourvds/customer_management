@@ -48,6 +48,7 @@ interface CustomerStore {
   
   // Actions - Bulk operations
   reorderCustomers: (customers: Customer[]) => void;
+  importCustomers: (customers: Array<Omit<Customer, 'id' | 'createdDate' | 'avatar'>>) => Promise<void>;
 }
 
 const useCustomerStore = create<CustomerStore>((set, get) => ({
@@ -257,6 +258,47 @@ const useCustomerStore = create<CustomerStore>((set, get) => ({
 
   // Reorder customers locally
   reorderCustomers: (customers) => set({ customers }),
+
+  // Import customers from CSV
+  importCustomers: async (customersToImport) => {
+    try {
+      set({ isLoading: true });
+      // Create all imported customers in the database
+      const createdCustomers = await Promise.all(
+        customersToImport.map((customer) =>
+          customerAPI.createCustomer({
+            fullName: customer.fullName,
+            email: customer.email,
+            phoneNumber: customer.phoneNumber,
+            address: customer.address,
+          })
+        )
+      );
+
+      const newCustomers = createdCustomers
+        .filter((response) => response.success)
+        .map((response) => ({
+          id: response.data._id,
+          fullName: response.data.fullName,
+          email: response.data.email,
+          phoneNumber: response.data.phoneNumber,
+          address: response.data.address,
+          createdDate: response.data.createdAt,
+          avatar: response.data.fullName,
+        }));
+
+      set((state) => ({
+        customers: [...newCustomers, ...state.customers],
+      }));
+      toast.success(`Successfully imported ${newCustomers.length} customers!`);
+    } catch (error: any) {
+      console.error('Failed to import customers:', error);
+      toast.error('Failed to import customers');
+      throw error;
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 }));
 
 export default useCustomerStore;
