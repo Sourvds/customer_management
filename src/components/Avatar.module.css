@@ -1,0 +1,65 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  color: #333;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+
+.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.75rem;
+}
+
+.md {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+.lg {
+  width: 64px;
+  height: 64px;
+  font-size: 1.25rem;
+}
+
+/* Avatar color variants */
+.avatar {
+  background-color: #FFB3BA;
+}
+
+:global(.avatar-color-ffb3ba) {
+  background-color: #FFB3BA;
+}
+
+:global(.avatar-color-ffcccb) {
+  background-color: #FFCCCB;
+}
+
+:global(.avatar-color-ffdfba) {
+  background-color: #FFDFBA;
+}
+
+:global(.avatar-color-ffffba) {
+  background-color: #FFFFBA;
+}
+
+:global(.avatar-color-baffc9) {
+  background-color: #BAFFC9;
+}
+
+:global(.avatar-color-bae1ff) {
+  background-color: #BAE1FF;
+}
+
+:global(.avatar-color-e0bbe4) {
+  background-color: #E0BBE4;
+}
+
+:global(.avatar-color-ffdfd3) {
+  background-color: #FFDFD3;
+}
